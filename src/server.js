@@ -10,11 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://expenza-ai.online",
-      "https://www.expenza-ai.online",
-    ],
+    origin: true,
     credentials: true,
   }),
 );
