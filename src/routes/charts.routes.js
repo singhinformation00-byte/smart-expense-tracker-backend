@@ -2,7 +2,7 @@ import express from "express";
 import {
   getPieChartData,
   getLineChartData,
-} from "../controllers/chart.Controller.js";
+} from "../controllers/chart.controller.js";
 import protect from "../middleware/auth.middleware.js";
 
 const router = express.Router();
