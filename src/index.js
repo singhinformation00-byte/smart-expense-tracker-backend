@@ -13,7 +13,12 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://expenza-ai.online",
+      "https://www.expenza-ai.online",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),
 );
