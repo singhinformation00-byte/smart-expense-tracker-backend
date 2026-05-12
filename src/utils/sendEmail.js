@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 const sendEmail = async ({ to, subject, html }) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
+    host: "smtp.hostinger.com",
     port: 465,
     secure: true,
 
@@ -13,12 +13,17 @@ const sendEmail = async ({ to, subject, html }) => {
 
     family: 4,
 
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000,
+
     tls: {
       rejectUnauthorized: false,
+      minVersion: "TLSv1.2",
     },
-
-    connectionTimeout: 10000,
   });
+
+  await transporter.verify();
 
   await transporter.sendMail({
     from: `"Expenza AI" <${process.env.EMAIL_USER}>`,
