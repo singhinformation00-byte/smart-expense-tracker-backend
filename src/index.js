@@ -9,6 +9,7 @@ import chartRoutes from "./routes/charts.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
+import notificationRoutes from "./routes/notificationRoutes.js";
 const app = express();
 
 app.use(
@@ -26,7 +27,8 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Route Connect
+// Route
+app.use("/api/notification", notificationRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/transactions", transactionRoutes);
