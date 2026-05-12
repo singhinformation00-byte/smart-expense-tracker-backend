@@ -11,14 +11,14 @@ const sendEmail = async ({ to, subject, html }) => {
       pass: process.env.EMAIL_PASS,
     },
 
+    family: 4,
+
     tls: {
       rejectUnauthorized: false,
     },
 
     connectionTimeout: 10000,
   });
-
-  await transporter.verify();
 
   await transporter.sendMail({
     from: `"Expenza AI" <${process.env.EMAIL_USER}>`,
