@@ -3,8 +3,8 @@ import nodemailer from "nodemailer";
 const sendEmail = async ({ to, subject, html }) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
 
     auth: {
       user: process.env.EMAIL_USER,
@@ -13,10 +13,18 @@ const sendEmail = async ({ to, subject, html }) => {
 
     family: 4,
 
+    requireTLS: true,
+
     tls: {
       rejectUnauthorized: false,
     },
+
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000,
   });
+
+  await transporter.verify();
 
   await transporter.sendMail({
     from: `"Expenza AI" <${process.env.EMAIL_USER}>`,
