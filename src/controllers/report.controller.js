@@ -60,6 +60,45 @@ export const getSummaryReport = async (req, res) => {
 
     const balance = totalIncome - totalExpense;
 
+    const paymentSummary = await Transaction.aggregate([
+      {
+        $match: match,
+      },
+
+      {
+        $group: {
+          _id: "$paymentType",
+
+          income: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "income"] }, "$amount", 0],
+            },
+          },
+
+          expense: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0],
+            },
+          },
+        },
+      },
+
+      {
+        $project: {
+          _id: 0,
+
+          paymentType: "$_id",
+
+          income: 1,
+          expense: 1,
+
+          balance: {
+            $subtract: ["$income", "$expense"],
+          },
+        },
+      },
+    ]);
+
     // =========================
     // 🔥 GROWTH CALCULATION
     // =========================
@@ -120,6 +159,7 @@ export const getSummaryReport = async (req, res) => {
         balance,
         incomeGrowth,
         expenseGrowth,
+        paymentSummary,
       },
     });
   } catch (error) {
