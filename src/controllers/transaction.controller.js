@@ -193,6 +193,12 @@ export const getCategoryTotals = async (req, res) => {
   try {
     const totals = await Transaction.aggregate([
       {
+        $match: {
+          user: new mongoose.Types.ObjectId(req.user._id),
+        },
+      },
+
+      {
         $lookup: {
           from: "categories",
           localField: "category",
@@ -222,11 +228,21 @@ export const getCategoryTotals = async (req, res) => {
           total: 1,
         },
       },
+
+      {
+        $sort: {
+          total: -1,
+        },
+      },
     ]);
 
-    res.status(200).json(totals);
+    res.status(200).json({
+      success: true,
+      data: totals,
+    });
   } catch (error) {
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
