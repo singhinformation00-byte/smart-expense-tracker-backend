@@ -188,3 +188,46 @@ export const getRecentExpenses = async (req, res) => {
     });
   }
 };
+
+export const getCategoryTotals = async (req, res) => {
+  try {
+    const totals = await Transaction.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+
+      {
+        $unwind: "$category",
+      },
+
+      {
+        $group: {
+          _id: "$category.label",
+
+          total: {
+            $sum: "$amount",
+          },
+        },
+      },
+
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          total: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(totals);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
